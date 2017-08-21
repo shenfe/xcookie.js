@@ -28,4 +28,5 @@ IE8+.
 
 ## License
 [MIT](http://opensource.org/licenses/MIT)
+
 Copyright (c) 2017-present, [shenfe](https://github.com/shenfe)
