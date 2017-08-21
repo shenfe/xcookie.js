@@ -1,0 +1,40 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01//EN" "http://www.w3.org/TR/html4/strict.dtd">
+<html>
+    <head>
+        <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1" />
+        <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+        <title></title>
+    </head>
+    <body>
+        <script type="text/javascript">
+        (function () {
+            function parseQueryNames() {
+                var r = [];
+                var queryStr = window.location.search;
+                if (queryStr.length > 0) {
+                    r = queryStr.substr(1).split('&');
+                    for (var i = 0, len = r.length; i < len; i++) {
+                        r[i] = decodeURIComponent(r[i].split('=')[0]);
+                    }
+                }
+                return r;
+            }
+
+            function getCookie(name) {
+                var arr, reg = new RegExp('(^| )' + name + '=([^;]*)(;|$)');
+                return (arr = window.document.cookie.match(reg)) ? unescape(arr[2]) : null;
+            }
+
+            var cookies = {};
+            var cookieNames = parseQueryNames();
+            for (var i = 0, len = cookieNames.length; i < len; i++) {
+                var v = getCookie(cookieNames[i]);
+                if (v !== '') {
+                    cookies[cookieNames[i]] = v;
+                }
+            }
+            window.parent.postMessage('[iframexcookie]' + JSON.stringify(cookies), '*');
+        })();
+        </script>
+    </body>
+</html>
