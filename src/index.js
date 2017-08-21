@@ -14,7 +14,7 @@ function iframexcookie(option) {
 
     var iframeSrc = option.src;
     var cookieNames = option.cookieNames;
-    var callback = option.callback;
+    var callback = option.doneWith;
     var targetDomain = parseDomain(iframeSrc);
     var localDomain = parseDomain(window.location.href);
 
@@ -44,7 +44,7 @@ function iframexcookie(option) {
                 if (!r.hasOwnProperty(c)) continue;
                 Cookies.set(c, r[c], { expires: 7, path: '/' });
             }
-            callback && callback();
+            callback && callback(r);
         }
     }
 
