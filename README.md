@@ -17,8 +17,8 @@ Get cross-domain cookies in "iframe" way.
   iframexcookie({
       src: 'http://www.target.com/path/to/xcookie.html',
       cookieNames: ['name1'],
-      callback: function () {
-          alert(window.document.cookie);
+      doneWith: function (data) {
+          alert(JSON.stringify(data));
       }
   });
   ```
