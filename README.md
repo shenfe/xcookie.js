@@ -1,5 +1,5 @@
 # xcookie.js
-Get cross-domain cookies through "iframe" way.
+Get cross-domain cookies in "iframe" way.
 
 ## Usage
 1. Define the whitelist or blacklist of cookie names in `dist/xcookie.html`. For example:
