@@ -6,7 +6,7 @@ const open = require('open');
 const ip = require('ip');
 
 fs.writeFileSync(path.resolve(process.cwd(), './test/xcookie.html'),
-    fs.readFileSync(path.resolve(process.cwd(), './src/xcookie.html'), 'utf8')
+    fs.readFileSync(path.resolve(process.cwd(), './dist/xcookie.html'), 'utf8')
         .replace('/* Define a whitelist of cookie names here. */', '"127_0_0_1"'));
 
 function launchServer(port, path) {
