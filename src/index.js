@@ -14,6 +14,7 @@ function iframexcookie(option) {
 
     var iframeSrc = option.src;
     var cookieNames = option.cookieNames;
+    var callback = option.callback;
     var targetDomain = parseDomain(iframeSrc);
     var localDomain = parseDomain(window.location.href);
 
@@ -43,9 +44,15 @@ function iframexcookie(option) {
                 if (!r.hasOwnProperty(c)) continue;
                 Cookies.set(c, r[c], { expires: 7, path: '/' });
             }
+            callback && callback();
         }
     }
-    window.addEventListener('message', messageEventHandler, false);
+
+    if (window.addEventListener) {
+        window.addEventListener('message', messageEventHandler, false);
+    } else {
+        window.attachEvent('onmessage', messageEventHandler);
+    }
 
     function joinQueryNames(list) {
         var r = '';

@@ -6,14 +6,13 @@
         <script src="http://localhost:4012/xcookie.js" charset="utf-8"></script>
     </head>
     <body>
-        <h1 id="title"></h1>
         <script type="text/javascript">
-            window.onload = function () {
-                window.document.getElementById('title').innerHTML = window.location.host;
-            };
             iframexcookie({
                 src: 'http://127.0.0.1:4011/xcookie.html',
-                cookieNames: ['127_0_0_1']
+                cookieNames: ['127_0_0_1'],
+                callback: function () {
+                    alert(window.document.cookie);
+                }
             });
         </script>
     </body>

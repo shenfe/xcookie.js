@@ -143,4 +143,4 @@ function init (converter) {
     return api;
 }
 
-export let Cookies = init(function () {})
+export var Cookies = init(function () {})
