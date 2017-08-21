@@ -7,7 +7,7 @@
     </head>
     <body>
         <script type="text/javascript">
-        (function () {
+        (function (whitelist, blacklist) {
             function parseQueryNames() {
                 var r = [];
                 var queryStr = window.location.search;
@@ -24,17 +24,35 @@
                 var arr, reg = new RegExp('(^| )' + name + '=([^;]*)(;|$)');
                 return (arr = window.document.cookie.match(reg)) ? unescape(arr[2]) : null;
             }
-
+            
+            function isArray(arr) {
+                return Object.prototype.toString.call(arr) === '[object Array]';
+            }
+            
+            function inArray(item, arr) {
+                for (var i = 0, len = arr.length; i < len; i++) {
+                    if (item === arr[i]) return i;
+                }
+                return -1;
+            }
+            
+            if (!isArray(whitelist) && !isArray(blacklist)) return;
             var cookies = {};
             var cookieNames = parseQueryNames();
             for (var i = 0, len = cookieNames.length; i < len; i++) {
+                if (isArray(whitelist)) {
+                    if (inArray(cookieNames[i], whitelist) < 0) continue;
+                }
+                if (isArray(blacklist)) {
+                    if (inArray(cookieNames[i], blacklist) >= 0) continue;
+                }
                 var v = getCookie(cookieNames[i]);
                 if (v !== '') {
                     cookies[cookieNames[i]] = v;
                 }
             }
             window.parent.postMessage('[iframexcookie]' + JSON.stringify(cookies), '*');
-        })();
+        })([/* Define a whitelist of cookie names here. */]);
         </script>
     </body>
 </html>
