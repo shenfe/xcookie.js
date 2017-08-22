@@ -44,7 +44,11 @@ Get cross-domain cookies in "iframe" way.
 
 ## Compatibility
 
-IE8+.
+IE8+. To support IE7, please include JSON polyfill first.
+
+## Thanks
+
+* [js-cookie](https://github.com/js-cookie/js-cookie)
 
 ## License
 
