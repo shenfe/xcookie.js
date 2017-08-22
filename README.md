@@ -34,11 +34,11 @@ Get cross-domain cookies in "iframe" way.
 
     ```js
     iframexcookie({
-      src: 'http://www.target.com/path/to/xcookie.html',
-      cookieNames: ['name1'],
-      doneWith: function (data) {
-          alert(JSON.stringify(data));
-      }
+        src: 'http://www.target.com/path/to/xcookie.html',
+        cookieNames: ['name1'],
+        doneWith: function (data) {
+            alert(JSON.stringify(data));
+        }
     });
     ```
 
