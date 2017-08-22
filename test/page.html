@@ -1,7 +1,8 @@
-<!DOCTYPE html>
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01//EN" "http://www.w3.org/TR/html4/strict.dtd">
 <html>
     <head>
-        <meta charset="utf-8">
+        <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1" />
+        <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
         <title></title>
         <script src="http://localhost:4012/xcookie.js" charset="utf-8"></script>
     </head>
@@ -10,7 +11,7 @@
             iframexcookie({
                 src: 'http://127.0.0.1:4011/xcookie.html',
                 cookieNames: ['127_0_0_1'],
-                callback: function () {
+                doneWith: function () {
                     alert(window.document.cookie);
                 }
             });

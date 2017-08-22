@@ -4,9 +4,11 @@ const express = require('express');
 const cookieParser = require('cookie-parser');
 const open = require('open');
 const ip = require('ip');
+const ipAddr = ip.address();
 
 fs.writeFileSync(path.resolve(process.cwd(), './test/xcookie.html'),
     fs.readFileSync(path.resolve(process.cwd(), './dist/xcookie.html'), 'utf8')
+        .replace('/* Define a whitelist of host names here. */', `"${ipAddr}"`)
         .replace('/* Define a whitelist of cookie names here. */', '"127_0_0_1"'));
 
 function launchServer(port, path) {
@@ -29,6 +31,5 @@ launchServer(4010, 'test');
 launchServer(4011, 'test');
 launchServer(4012, 'dist');
 
-let ipAddr = ip.address();
 console.log(`ip: ${ipAddr}`);
 open(`http://${ipAddr}:4010/page.html`);
