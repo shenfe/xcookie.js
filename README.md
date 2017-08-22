@@ -2,7 +2,21 @@
 Get cross-domain cookies in "iframe" way.
 
 ## Usage
-1. Define the whitelist or blacklist of cookie names in `dist/xcookie.html`. For example:
+1. Define the invoker-hostname whitelist and the cookie-name whitelist in `dist/xcookie.html`. For example:
+
+Define the invoker-hostname whitelist:
+
+  > Replace
+  > ```js
+  > [/* Define a whitelist of host names here. */]
+  > ```
+  > with
+  > ```js
+  > ['invoker.com']
+  > ```
+
+Define the cookie-name whitelist:
+
   > Replace
   > ```js
   > [/* Define a whitelist of cookie names here. */]
@@ -11,6 +25,7 @@ Get cross-domain cookies in "iframe" way.
   > ```js
   > ['name1', 'name2']
   > ```
+
 2. Place the `xcookie.html` page file somewhere under the target domain (e.g. "www.target.com") whose cookie you would like to get.
 3. Import the `dist/xcookie.js` script file in your page, and use it like this:
   ```js
