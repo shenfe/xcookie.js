@@ -11,8 +11,8 @@
             iframexcookie({
                 src: 'http://127.0.0.1:4011/xcookie.html',
                 cookieNames: ['127_0_0_1'],
-                doneWith: function () {
-                    alert(window.document.cookie);
+                doneWith: function (data) {
+                    alert(JSON.stringify(data));
                 }
             });
         </script>
