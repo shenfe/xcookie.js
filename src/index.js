@@ -36,13 +36,18 @@ function iframexcookie(option) {
     }
 
     var iframe = getIframe(targetDomain);
+    
+    function cookieNameTrans(n) {
+        if (Object.prototype.toString.call(cookieNames) === '[object Array]') return n;
+        return cookieNames[n];
+    }
 
     function messageEventHandler(e) {
         if (e.data.substr(0, '[iframexcookie]'.length) === '[iframexcookie]') {
             var r = JSON.parse(e.data.substr('[iframexcookie]'.length));
             for (var c in r) {
                 if (!r.hasOwnProperty(c)) continue;
-                Cookies.set(c, r[c], { expires: 7, path: '/' });
+                Cookies.set(cookieNameTrans(c), r[c], { expires: 7, path: '/' });
             }
             callback && callback(r);
         }
@@ -56,9 +61,22 @@ function iframexcookie(option) {
 
     function joinQueryNames(list) {
         var r = '';
-        for (var i = 0, len = list.length; i < len; i++) {
-            if (i === 0) r = encodeURIComponent(list[i]);
-            else r += '&' + encodeURIComponent(list[i]);
+        if (Object.prototype.toString.call(cookieNames) === '[object Array]') {
+            for (var i = 0, len = list.length; i < len; i++) {
+                if (i === 0) r = encodeURIComponent(list[i]);
+                else r += '&' + encodeURIComponent(list[i]);
+            }
+        } else {
+            var i = 0;
+            for (var c in list) {
+                if (!list.hasOwnProperty(c)) continue;
+                if (i === 0) {
+                    i++;
+                    r = encodeURIComponent(c);
+                } else {
+                    r += '&' + encodeURIComponent(c);
+                }
+            }
         }
         return r;
     }
