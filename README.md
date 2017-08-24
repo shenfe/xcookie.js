@@ -14,7 +14,7 @@ Get cross-domain cookies in "iframe" way.
     > ```
     > with
     > ```js
-    > ['invoker.com']
+    > ['.invoker.com']
     > ```
 
     Define the cookie-name whitelist:
