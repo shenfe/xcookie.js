@@ -41,11 +41,11 @@
                 }
             } else {
                 for (var i = 0, len = whitelist.length; i < len; i++) {
-                    if (parentHost.endsWith(whitelist[i])) return true;
+                    if (parentHost.endsWith(whitelist[i]) || ('.' + parentHost) === whitelist[i]) return true;
                 }
                 throw new Error('Host blocked!');
             }
-        })([/* Define a whitelist of host names here. */]);
+        })([/* Define a whitelist of host names here, e.g. '.invoker.com'. */]);
 
         (function (whitelist, blacklist) {
             function parseQueryNames() {
