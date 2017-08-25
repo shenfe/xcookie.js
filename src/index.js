@@ -17,6 +17,7 @@ function iframexcookie(option) {
     var callback = option.doneWith;
     var targetDomain = parseDomain(iframeSrc);
     var localDomain = parseDomain(window.location.href);
+    var autoRemove = !!(option.autoRemove);
 
     function getIframe(domain, src) {
         var iframeId = 'xcookie-' + domain.replace(/\./g, '_');
@@ -50,6 +51,7 @@ function iframexcookie(option) {
                 Cookies.set(cookieNameTrans(c), r[c], { expires: 7, domain: localDomain, path: '/' });
             }
             callback && callback(r);
+            if (autoRemove) window.document.body.removeChild(iframe);
         }
     }
 
