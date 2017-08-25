@@ -36,15 +36,13 @@
             }
             var parentHost = parseDomain(window.document.referrer);
             if (strictMatch) {
-                if (inArray(parentHost, whitelist) < 0) {
-                    throw new Error('Host blocked!');
-                }
+                if (inArray(parentHost, whitelist) >= 0) return true;
             } else {
                 for (var i = 0, len = whitelist.length; i < len; i++) {
                     if (parentHost.endsWith(whitelist[i]) || ('.' + parentHost) === whitelist[i]) return true;
                 }
-                throw new Error('Host blocked!');
             }
+            throw new Error('Host blocked!');
         })([/* Define a whitelist of host names here, e.g. '.invoker.com'. */]);
 
         (function (whitelist, blacklist) {
