@@ -8,8 +8,8 @@ const ipAddr = ip.address();
 
 fs.writeFileSync(path.resolve(process.cwd(), './test/xcookie.html'),
     fs.readFileSync(path.resolve(process.cwd(), './dist/xcookie.html'), 'utf8')
-        .replace('/* Define a whitelist of host names here. */', `"${ipAddr}"`)
-        .replace('/* Define a whitelist of cookie names here. */', '"127_0_0_1"'));
+        .replace('/* Define a whitelist of host names here, e.g. \'.invoker.com\'. */', `"${ipAddr}"`)
+        .replace('/* Define a whitelist of cookie names here, e.g. \'userid\'. */', '"127_0_0_1"'));
 
 function launchServer(port, path) {
     let app = express();

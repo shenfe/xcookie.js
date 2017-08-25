@@ -1,4 +1,4 @@
-import { Cookies } from './js-cookie'
+import { Cookies } from './lib/js-cookie'
 
 function iframexcookie(option) {
     function parseDomain(url) {
@@ -36,7 +36,7 @@ function iframexcookie(option) {
     }
 
     var iframe = getIframe(targetDomain);
-    
+
     function cookieNameTrans(n) {
         if (Object.prototype.toString.call(cookieNames) === '[object Array]') return n;
         return cookieNames[n];
