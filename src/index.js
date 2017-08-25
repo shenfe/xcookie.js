@@ -47,7 +47,7 @@ function iframexcookie(option) {
             var r = JSON.parse(e.data.substr('[iframexcookie]'.length));
             for (var c in r) {
                 if (!r.hasOwnProperty(c)) continue;
-                Cookies.set(cookieNameTrans(c), r[c], { expires: 7, path: '/' });
+                Cookies.set(cookieNameTrans(c), r[c], { expires: 7, domain: localDomain, path: '/' });
             }
             callback && callback(r);
         }
