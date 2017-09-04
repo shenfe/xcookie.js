@@ -63,7 +63,7 @@ function iframexcookie(option) {
 
     function joinQueryNames(list) {
         var r = '';
-        if (Object.prototype.toString.call(cookieNames) === '[object Array]') {
+        if (Object.prototype.toString.call(list) === '[object Array]') {
             for (var i = 0, len = list.length; i < len; i++) {
                 if (i === 0) r = encodeURIComponent(list[i]);
                 else r += '&' + encodeURIComponent(list[i]);
