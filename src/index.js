@@ -95,10 +95,10 @@ function iframexcookie(option) {
                 for (var c in r) {
                     if (!r.hasOwnProperty(c) || r[c] == null) continue;
                     Cookies.set(cookieNameTrans(c), r[c], { expires: 7, domain: localDomain, path: '/' });
-                    if (callbackIdTable[iframexcookie_id]) {
-                        callbackIdTable[iframexcookie_id](r);
-                        delete callbackIdTable[iframexcookie_id];
-                    }
+                }
+                if (callbackIdTable[iframexcookie_id]) {
+                    callbackIdTable[iframexcookie_id](r);
+                    delete callbackIdTable[iframexcookie_id];
                 }
             } catch (e) {}
         }
