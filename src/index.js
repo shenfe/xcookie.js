@@ -50,6 +50,46 @@ var idGen = (function () {
 })();
 
 var callbackIdTable = {};
+var cookieNameMapIdTable = {};
+
+function messageEventHandler(e) {
+    var p0 = '[iframexcookie:'.length;
+    if (e.data.substr(0, p0) === '[iframexcookie:') {
+        var p1 = e.data.indexOf(']', p0);
+        if (p1 < 0) return;
+        var iframexcookie_id = e.data.substring(p0, p1);
+        try {
+            var r = JSON.parse(e.data.substr(p1 + 1));
+            for (var c in r) {
+                if (!r.hasOwnProperty(c) || r[c] == null) continue;
+                Cookies.set(cookieNameMapIdTable[iframexcookie_id](c), r[c], { expires: 7, domain: localDomain, path: '/' });
+            }
+            if (callbackIdTable[iframexcookie_id]) {
+                callbackIdTable[iframexcookie_id](r);
+                delete callbackIdTable[iframexcookie_id];
+            }
+        } catch (e) {}
+    }
+}
+
+addMessageListener(messageEventHandler);
+
+function getIframe(domain, src) {
+    var iframeId = 'xcookie-' + domain.replace(/\./g, '_');
+    var ifr = window.document.getElementById(iframeId);
+    if (!ifr) {
+        ifr = window.document.createElement('iframe');
+        ifr.id = iframeId;
+        ifr.style.display = 'none';
+        window.document.body.appendChild(ifr);
+    }
+    if (src !== undefined) {
+        ifr.src = src;
+    } else {
+        ifr.src = '';
+    }
+    return ifr;
+}
 
 function iframexcookie(option) {
     var iframeSrc = option.src;
@@ -60,51 +100,12 @@ function iframexcookie(option) {
     var targetDomain = parseDomain(iframeSrc);
     var localDomain = parseDomain(window.location.href);
 
-    function getIframe(domain, src) {
-        var iframeId = 'xcookie-' + domain.replace(/\./g, '_');
-        var ifr = window.document.getElementById(iframeId);
-        if (!ifr) {
-            ifr = window.document.createElement('iframe');
-            ifr.id = iframeId;
-            ifr.style.display = 'none';
-            window.document.body.appendChild(ifr);
-        }
-        if (src !== undefined) {
-            ifr.src = src;
-        } else {
-            ifr.src = '';
-        }
-        return ifr;
-    }
-
     var iframe = getIframe(targetDomain);
 
-    function cookieNameTrans(n) {
+    cookieNameMapIdTable[id] = function (n) {
         if (Object.prototype.toString.call(cookieNames) === '[object Array]') return n;
         return cookieNames[n];
-    }
-
-    function messageEventHandler(e) {
-        var p0 = '[iframexcookie:'.length;
-        if (e.data.substr(0, p0) === '[iframexcookie:') {
-            var p1 = e.data.indexOf(']', p0);
-            if (p1 < 0) return;
-            var iframexcookie_id = e.data.substring(p0, p1);
-            try {
-                var r = JSON.parse(e.data.substr(p1 + 1));
-                for (var c in r) {
-                    if (!r.hasOwnProperty(c) || r[c] == null) continue;
-                    Cookies.set(cookieNameTrans(c), r[c], { expires: 7, domain: localDomain, path: '/' });
-                }
-                if (callbackIdTable[iframexcookie_id]) {
-                    callbackIdTable[iframexcookie_id](r);
-                    delete callbackIdTable[iframexcookie_id];
-                }
-            } catch (e) {}
-        }
-    }
-
-    addMessageListener(messageEventHandler);
+    };
 
     getIframe(targetDomain, iframeSrc + '?' + joinQueryNames(cookieNames) + '&iframexcookie_id=' + id);
 }
