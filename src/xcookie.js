@@ -39,13 +39,20 @@ function inArray(item, arr) {
 })(HostWhitelist);
 
 (function (whitelist, blacklist) {
+    var iframexcookie_id = null;
+
     function parseQueryNames() {
         var r = [];
         var queryStr = window.location.search;
         if (queryStr.length > 0) {
             r = queryStr.substr(1).split('&');
             for (var i = 0, len = r.length; i < len; i++) {
-                r[i] = decodeURIComponent(r[i].split('=')[0]);
+                var kv = r[i].split('=');
+                if (kv[0] === 'iframexcookie_id') {
+                    iframexcookie_id = kv[1];
+                } else {
+                    r[i] = decodeURIComponent(kv[0]);
+                }
             }
         }
         return r;
@@ -71,5 +78,5 @@ function inArray(item, arr) {
             cookies[cookieNames[i]] = v;
         }
     }
-    window.parent.postMessage('[iframexcookie]' + JSON.stringify(cookies), '*');
+    window.parent.postMessage('[iframexcookie:' + iframexcookie_id + ']' + JSON.stringify(cookies), '*');
 })(CookieWhitelist);
