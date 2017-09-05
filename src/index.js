@@ -49,6 +49,8 @@ var idGen = (function () {
     };
 })();
 
+var localDomain = parseDomain(window.location.href);
+
 var callbackIdTable = {};
 var cookieNameMapIdTable = {};
 
@@ -68,14 +70,20 @@ function messageEventHandler(e) {
                 callbackIdTable[iframexcookie_id](r);
                 delete callbackIdTable[iframexcookie_id];
             }
+            delete cookieNameMapIdTable[iframexcookie_id];
+            window.document.body.removeChild(window.document.getElementById(transId(iframexcookie_id)));
         } catch (e) {}
     }
 }
 
 addMessageListener(messageEventHandler);
 
-function getIframe(domain, src) {
-    var iframeId = 'xcookie-' + domain.replace(/\./g, '_');
+function transId(id) {
+    return 'xcookie-' + id;
+}
+
+function getIframe(id, src) {
+    var iframeId = transId(id);
     var ifr = window.document.getElementById(iframeId);
     if (!ifr) {
         ifr = window.document.createElement('iframe');
@@ -94,20 +102,17 @@ function getIframe(domain, src) {
 function iframexcookie(option) {
     var iframeSrc = option.src;
     var cookieNames = option.cookieNames;
-    var callback = option.doneWith;
     var id = idGen();
+    
+    var callback = option.doneWith;
     if (callback) callbackIdTable[id] = callback;
-    var targetDomain = parseDomain(iframeSrc);
-    var localDomain = parseDomain(window.location.href);
-
-    var iframe = getIframe(targetDomain);
 
     cookieNameMapIdTable[id] = function (n) {
         if (Object.prototype.toString.call(cookieNames) === '[object Array]') return n;
         return cookieNames[n];
     };
 
-    getIframe(targetDomain, iframeSrc + '?' + joinQueryNames(cookieNames) + '&iframexcookie_id=' + id);
+    getIframe(id, iframeSrc + '?' + joinQueryNames(cookieNames) + '&iframexcookie_id=' + id);
 }
 
 export default iframexcookie
