@@ -11,11 +11,12 @@ function parseDomain(url) {
     else return hostParts.join('.');
 }
 
-function addMessageListener(handler) {
+function listenEvent(event, handler, target) {
+    target = target || window;
     if (window.addEventListener) {
-        window.addEventListener('message', handler, false);
+        target.addEventListener(event, handler, false);
     } else {
-        window.attachEvent('onmessage', handler);
+        target.attachEvent('on' + event, handler);
     }
 }
 
@@ -54,33 +55,40 @@ var localDomain = parseDomain(window.location.href);
 var callbackIdTable = {};
 var cookieNameMapIdTable = {};
 
+function transId(id) {
+    return 'xcookie-' + id;
+}
+
+function clearTask(id, res) {
+    if (callbackIdTable[id]) {
+        callbackIdTable[id](res);
+        delete callbackIdTable[id];
+    }
+    delete cookieNameMapIdTable[id];
+    window.document.body.removeChild(window.document.getElementById(transId(id)));
+}
+
 function messageEventHandler(e) {
     var p0 = '[iframexcookie:'.length;
     if (e.data.substr(0, p0) === '[iframexcookie:') {
         var p1 = e.data.indexOf(']', p0);
         if (p1 < 0) return;
         var iframexcookie_id = e.data.substring(p0, p1);
+        var r;
         try {
-            var r = JSON.parse(e.data.substr(p1 + 1));
+            r = JSON.parse(e.data.substr(p1 + 1));
             for (var c in r) {
                 if (!r.hasOwnProperty(c) || r[c] == null) continue;
                 Cookies.set(cookieNameMapIdTable[iframexcookie_id](c), r[c], { expires: 7, domain: localDomain, path: '/' });
             }
-            if (callbackIdTable[iframexcookie_id]) {
-                callbackIdTable[iframexcookie_id](r);
-                delete callbackIdTable[iframexcookie_id];
-            }
-            delete cookieNameMapIdTable[iframexcookie_id];
-            window.document.body.removeChild(window.document.getElementById(transId(iframexcookie_id)));
-        } catch (e) {}
+        } catch (e) {
+            r = {};
+        }
+        clearTask(iframexcookie_id, r);
     }
 }
 
-addMessageListener(messageEventHandler);
-
-function transId(id) {
-    return 'xcookie-' + id;
-}
+listenEvent('message', messageEventHandler);
 
 function getIframe(id, src) {
     var iframeId = transId(id);
@@ -112,12 +120,13 @@ function iframexcookie(option) {
         return cookieNames[n];
     };
 
-    var iframeError = setTimeout(error, 5000);
     var ifr = getIframe(id, iframeSrc + '?' + joinQueryNames(cookieNames) + '&iframexcookie_id=' + id);
-    ifr.addEventListener('load', function () {
-        load('ok');
-        clearTimeout(iframeError);
-    }, false);
+    var ifrErr = window.setTimeout(function () {
+        clearTask(id, {});
+    }, 5000);
+    listenEvent('load', function () {
+        window.clearTimeout(ifrErr);
+    }, ifr);
 }
 
 export default iframexcookie
