@@ -112,7 +112,12 @@ function iframexcookie(option) {
         return cookieNames[n];
     };
 
-    getIframe(id, iframeSrc + '?' + joinQueryNames(cookieNames) + '&iframexcookie_id=' + id);
+    var iframeError = setTimeout(error, 5000);
+    var ifr = getIframe(id, iframeSrc + '?' + joinQueryNames(cookieNames) + '&iframexcookie_id=' + id);
+    ifr.addEventListener('load', function () {
+        load('ok');
+        clearTimeout(iframeError);
+    }, false);
 }
 
 export default iframexcookie
