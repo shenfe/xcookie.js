@@ -123,7 +123,7 @@ function iframexcookie(option) {
     var ifr = getIframe(id, iframeSrc + '?' + joinQueryNames(cookieNames) + '&iframexcookie_id=' + id);
     var ifrErr = window.setTimeout(function () {
         clearTask(id, {});
-    }, 5000);
+    }, option.timeout || 5000);
     listenEvent('load', function () {
         window.clearTimeout(ifrErr);
     }, ifr);
