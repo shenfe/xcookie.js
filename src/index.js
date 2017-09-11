@@ -70,7 +70,7 @@ function clearTask(id, res) {
 
 function messageEventHandler(e) {
     var p0 = '[iframexcookie:'.length;
-    if (e.data.substr(0, p0) === '[iframexcookie:') {
+    if (typeof e.data === 'string' && e.data.substr(0, p0) === '[iframexcookie:') {
         var p1 = e.data.indexOf(']', p0);
         if (p1 < 0) return;
         var iframexcookie_id = e.data.substring(p0, p1);
